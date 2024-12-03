@@ -1,7 +1,10 @@
-import React from 'react'
-import { Link } from "react-router-dom";
 
- const Navbar = () => {
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../state/slices/authSlice";
+const Navbar = () => {
+    const user = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
   return (
    <>
            <div className="container-fluid fixed-top">
@@ -30,7 +33,14 @@ import { Link } from "react-router-dom";
                             <Link to="/" className="nav-item nav-link active">Home</Link>
                             <Link to="shop" className="nav-item nav-link ">Shop</Link>
                             <Link to="shop-details" className="nav-item nav-link ">Shop Detail</Link>
-                           
+                              <div className="nav-item dropdown">
+                                  <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Admin</a>
+                                  <div className="dropdown-menu m-0 bg-secondary rounded-0">
+                                      <Link to="admin/products" className="dropdown-item">Products</Link>
+                                      <Link to="add-product" className="dropdown-item">Add Product</Link>
+
+                                  </div>
+                              </div>
                             <div className="nav-item dropdown">
                                 <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                                 <div className="dropdown-menu m-0 bg-secondary rounded-0">
@@ -47,10 +57,20 @@ import { Link } from "react-router-dom";
                             <a href="#" className="position-relative me-4 my-auto">
                                 <i className="fa fa-shopping-bag fa-2x"></i>
                                 <span className="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style={{top: "-5px", left: "15px", height: "20px", minWwidth: "20px"}}>3</span>
-                            </a>
-                            <Link to="login" className="my-auto">
+                              </a>
+                              {/* Check the condition for login and logout */}
+                              {user.user.success ? (
+                                  <Link to="login" className="my-auto">
+                                      <i className="fas fa-user fa-2x"></i>
+                                  </Link>
+                              ) : (
+
+                                  <button onClick={dispatch(logout())}>Logout</button>
+
+                              )}
+                              {/* <Link to="login" className="my-auto">
                                 <i className="fas fa-user fa-2x"></i>
-                            </Link>
+                            </Link> */}
                         </div>
                     </div>
                 </nav>

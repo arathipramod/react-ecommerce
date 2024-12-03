@@ -1,6 +1,49 @@
-import React from 'react'
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { login } from "../state/slices/authSlice";
+import { useState } from "react";
+import Swal from 'sweetalert2'
 
 const Login = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth);
+    console.log(user)
+    console.log(user.user.success, 'user login.......');
+    if (user.user.success == true) {
+        Swal.fire({
+            title: "Logged in successfully",
+            // text: "You clicked the button!",
+            icon: "success"
+        });
+        navigate("/");
+        //alert("Login successfully");
+    }
+
+
+    const [form, setForm] = useState({
+
+        email: "",
+        password: "",
+
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm({
+            ...form,
+            [name]: value
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(form)
+
+
+        dispatch(login(form))
+
+    };
   return (
    <>
    <div className="container-fluid page-header py-5">
@@ -17,13 +60,16 @@ const Login = () => {
                     <div className="row g-4">
 
 
+
+
                         <div className="col-lg-7">
                             <form action="" className="">
                                
-                                <input type="email" className="w-100 form-control border-0 py-3 mb-4" placeholder="Enter Your Email" />
-                                <input type="password" className="w-100 form-control border-0 py-3 mb-4" placeholder="Your Password" />
-                                <button className="w-100 btn form-control border-secondary py-3 bg-white text-primary " type="submit">Login</button>
-                            </form>
+                                  <input type="email" className="w-100 form-control border-0 py-3 mb-4" placeholder="Enter Your Email" name="email" onChange={handleChange} />
+                                  <input type="password" className="w-100 form-control border-0 py-3 mb-4" placeholder="Your Password" name="password" onChange={handleChange} />
+                                  <button className="w-100 btn form-control border-secondary py-3 bg-white text-primary " type="button" onClick={handleSubmit}>Login</button>
+                              </form>
+                              <span>Dont Have an account<Link to="/signup">Sign Up</Link></span>
                         </div>
                         <div className="col-lg-5">
                             <div className="d-flex p-4 rounded mb-4 bg-white">
